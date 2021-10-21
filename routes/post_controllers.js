@@ -38,10 +38,7 @@ router.put('/:id', (req, res) => {
         return res.status(400).send(`ID inconnu : ${req.params.id}`)
     }else{
         const updateContact = {
-            nom: req.body.nom,
             prenom: req.body.prenom,
-            email: req.body.email,
-            age: req.body.age
         };
         PostModel.findByIdAndUpdate(
             req.params.id,
