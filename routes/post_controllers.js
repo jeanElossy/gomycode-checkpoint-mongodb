@@ -33,17 +33,19 @@ router.post("/", (req, res) => {
 })
 
 //PUT
-
 router.put('/:id', (req, res) => {
     if(!ObjectID.isValid(req.params.id)){
-        return res.status(404).send(`ID inconnu : ${req.params.id}`)
+        return res.status(400).send(`ID inconnu : ${req.params.id}`)
     }else{
         const updateContact = {
-            nom: req.body.nom
+            nom: req.body.nom,
+            prenom: req.body.prenom,
+            email: req.body.email,
+            age: req.body.age
         };
         PostModel.findByIdAndUpdate(
             req.params.id,
-            {set: updateContact},
+            {$set: updateContact},
             {new: true},
             (err, docs) => {
                 if(!err){
@@ -56,5 +58,18 @@ router.put('/:id', (req, res) => {
     }
 })
 
+//DELETE
+router.delete('/:id', (req, res) => {
+    if(!ObjectID.isValid(req.params.id)){
+        return res.status(400).send(`ID inconnu: ${req.params.id}`)
+    }else{
+        PostModel.findByIdAndRemove(
+            req.params.id,
+            (err, docs) => {
+                (!err) ? res.send(docs) : res.send(`Delete error: ${err}`)
+            }
+        )
+    }
+});
 
 module.exports = router;
